@@ -1,0 +1,46 @@
+-- student（生徒）
+CREATE TABLE student (
+  student_id   INT PRIMARY KEY,
+  name         VARCHAR(255) NOT NULL,
+  class        VARCHAR(255) NOT NULL,
+  mail_address VARCHAR(255) NOT NULL
+);
+
+-- class（クラス）
+CREATE TABLE class (
+  class_name VARCHAR(255) PRIMARY KEY
+);
+
+-- lesson（授業名のみ）
+CREATE TABLE lesson (
+  lesson_id   INT PRIMARY KEY,
+  lesson_name VARCHAR(255) NOT NULL
+);
+
+-- schedule（時間割）
+CREATE TABLE schedule (
+  lesson_id    INT NOT NULL,
+  class_name   VARCHAR(255) NOT NULL,
+  lesson_date  TIMESTAMP NOT NULL,
+  period_time  INT NOT NULL,
+  PRIMARY KEY (lesson_id, class_name),
+  FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id),
+  FOREIGN KEY (class_name) REFERENCES class(class_name)
+);
+
+-- attendance（出席）
+CREATE TABLE attendance (
+  student_id INT NOT NULL,
+  lesson_id  INT NOT NULL,
+  status     VARCHAR(10) NOT NULL CHECK (status IN ('出席', '遅刻', '欠席','公欠')),
+  PRIMARY KEY (student_id, lesson_id),
+  FOREIGN KEY (student_id) REFERENCES student(student_id),
+  FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id)
+);
+
+-- teacher（先生）
+CREATE TABLE teacher (
+  teacher_id INT PRIMARY KEY,
+  password   VARCHAR(255) NOT NULL
+);
+
