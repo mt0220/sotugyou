@@ -40,7 +40,8 @@ CREATE TABLE attendance (
 
 -- teacher（先生）
 CREATE TABLE teacher (
-  teacher_id INT PRIMARY KEY,
+  teacher_id VARCHAR(255)  PRIMARY KEY NOT NULL,
+  teacher_name VARCHAR(255) 
   password   VARCHAR(255) NOT NULL
 );
 
