@@ -34,7 +34,7 @@ CREATE TABLE schedule (
 CREATE TABLE attendance (
   student_id INT NOT NULL,
   schedule_id INT NOT NULL,
-  status ENUM('present', 'absent', 'late') NOT NULL,
+  status ENUM('出席', '欠席', '遅刻','公欠') NOT NULL,
   PRIMARY KEY (student_id, schedule_id),
   FOREIGN KEY (student_id) REFERENCES student(student_id),
   FOREIGN KEY (schedule_id) REFERENCES schedule(schedule_id)
