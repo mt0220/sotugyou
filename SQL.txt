@@ -1,47 +1,119 @@
--- 授業情報テーブル
+-- MySQL モードを有効に
+SET MODE MySQL;
+
+-- 科目マスタ
 CREATE TABLE lesson (
-  lesson_id INT PRIMARY KEY,
-  lesson_name VARCHAR(255) NOT NULL
+  lesson_id    INT          AUTO_INCREMENT PRIMARY KEY,
+  lesson_name  VARCHAR(255) NOT NULL,
+  max_koma     INT          NOT NULL
 );
 
--- クラステーブル
+-- クラスマスタ
 CREATE TABLE class (
-  class_id VARCHAR(255) PRIMARY KEY
+  class_id    INT          AUTO_INCREMENT PRIMARY KEY,
+  class_name  VARCHAR(255) NOT NULL
 );
 
--- 生徒情報テーブル
+-- 生徒マスタ
 CREATE TABLE student (
-  student_id INT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  class_id VARCHAR(255) NOT NULL,
-  parents_name VARCHAR(255),
-  mail_address VARCHAR(255),
-  FOREIGN KEY (class_name) REFERENCES class(class_name)
+  student_id    INT          AUTO_INCREMENT PRIMARY KEY,
+  name          VARCHAR(255) NOT NULL,
+  class_id      INT          NOT NULL,
+  mail_address  VARCHAR(255) NOT NULL,
+  FOREIGN KEY (class_id) REFERENCES class(class_id)
 );
 
--- 時間割（スケジュール）テーブル
+-- 時限スケジュール
 CREATE TABLE schedule (
-  schedule_id INT PRIMARY KEY,
-  class_name VARCHAR(255) NOT NULL,
-  lesson_id INT NOT NULL,
-  period_time INT NOT NULL,
-  lesson_date DATE NOT NULL,
-  FOREIGN KEY (class_name) REFERENCES class(class_name),
-  FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id)
+  schedule_id  INT    AUTO_INCREMENT PRIMARY KEY,
+  lesson_id    INT    NOT NULL,
+  class_id     INT    NOT NULL,
+  koma         INT    NOT NULL,
+  date         DATE   NOT NULL,
+  FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id),
+  FOREIGN KEY (class_id)  REFERENCES class(class_id)
 );
 
--- 出席管理テーブル
+-- 出欠テーブル
 CREATE TABLE attendance (
-  student_id INT NOT NULL,
-  schedule_id INT NOT NULL,
-  status ENUM('出席', '欠席', '遅刻','公欠') NOT NULL,
+  student_id   INT                NOT NULL,
+  schedule_id  INT                NOT NULL,
+  status       ENUM(
+                  '出席',
+                  '欠席',
+                  '遅刻',
+                  '公欠'
+               )                 NOT NULL,
   PRIMARY KEY (student_id, schedule_id),
-  FOREIGN KEY (student_id) REFERENCES student(student_id),
+  FOREIGN KEY (student_id)  REFERENCES student(student_id),
   FOREIGN KEY (schedule_id) REFERENCES schedule(schedule_id)
 );
 
--- 教員テーブル（ログイン用）
+-- 教師マスタ
 CREATE TABLE teacher (
-  teacher VARCHAR(255) PRIMARY KEY,
-  password VARCHAR(255) NOT NULL
+  teacher_id  INT          AUTO_INCREMENT PRIMARY KEY,
+  password    VARCHAR(255) NOT NULL
 );
+--履修テーブル
+CREATE TABLE rishuu(
+  rishuu_id INT           AUTO_INCREMENT PRIMARY KEY,
+  lesson_id INT           NOT NULL,
+  class_id  INT           NOT NULL,
+  FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id),
+  FOREIGN KEY (class_id) REFERENCES class(class_id)
+);
+--出欠一覧をだす
+SELECT
+  s.date         AS 日付,
+  s.koma         AS コマ,
+  c.class_name   AS クラス,
+  l.lesson_name  AS 科目,
+  a.student_id   AS 学生ID,
+  st.name        AS 学生名,
+  a.status       AS ステータス
+FROM attendance a
+  JOIN schedule s  ON a.schedule_id = s.schedule_id
+  JOIN class    c  ON s.class_id    = c.class_id
+  JOIN lesson   l  ON s.lesson_id   = l.lesson_id
+  JOIN student  st ON a.student_id  = st.student_id
+ORDER BY
+  s.date,
+  s.koma,
+  c.class_name,
+  a.student_id;
+
+--時間割一覧をだす
+SELECT
+  s.date          AS 日付,
+  s.koma          AS コマ,
+  c.class_name    AS クラス,
+  l.lesson_name   AS 科目,
+  s.schedule_id   AS 時間割ID
+FROM schedule s
+  INNER JOIN class   c ON s.class_id  = c.class_id
+  INNER JOIN lesson  l ON s.lesson_id = l.lesson_id
+ORDER BY
+  s.date,
+  s.koma,
+  c.class_name,
+  l.lesson_name;
+--学生一覧をだす
+SELECT 
+  s.student_id   AS 学生ID,
+  s.name         AS 名前,
+  s.class_id     AS クラス,
+  s.mail_address AS メールアドレス
+FROM student s
+  INNER JOIN class c ON s.class_id = c.class_id
+ORDER BY 
+  s.student_id;
+--履修一覧をだす
+SELECT
+  r.rishuu_id    AS 履修ID,
+  l.lesson_name  AS 履修科目,
+  c.class_name   AS クラス
+FROM rishuu r
+INNER JOIN lesson l
+  ON r.lesson_id = l.lesson_id
+INNER JOIN class c
+  ON r.class_id  = c.class_id;
