@@ -60,7 +60,7 @@
                     <div class="card-content">
                         <h3>時間割登録</h3>
                         <p>授業の時間割を設定・管理</p>
-                        <a href="studentRegistration.jsp" class="card-button">
+                        <a href="ScheduleList.jsp" class="card-button">
                             <i class="fas fa-arrow-right"></i>
                             設定する
                         </a>
