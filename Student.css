@@ -160,6 +160,29 @@ body {
     text-align: center;
 }
 
+
+/*カレンダーのcss*/
+#miniCalendar {
+      width: 300px;
+      height: 300px;
+      margin: auto;
+      font-size: 12px;
+    }
+
+    /* セルの余白を減らして正方形を保つ */
+    .fc .fc-daygrid-day-frame {
+      padding: 2px;
+    }
+
+    .fc .fc-toolbar-title {
+      font-size: 14px;
+    }
+
+    .fc .fc-button {
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
 .card-content h3 {
     margin: 0 0 10px 0;
     font-size: 1.4em;
@@ -891,4 +914,100 @@ body {
     .result-btn {
         margin: 0;
     }
+}
+
+/* Googleカレンダー風 時間割表 */
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #f4f6fb;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 auto;
+    table-layout: fixed;
+}
+.schedule-header th {
+    background: #4285f4;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 14px 0;
+    border-right: 1px solid #e3e6ef;
+    letter-spacing: 1px;
+}
+.schedule-header th:first-child {
+    background: #3367d6;
+}
+.schedule-days th {
+    background: #e8f0fe;
+    color: #4285f4;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 10px 0;
+    border-right: 1px solid #e3e6ef;
+}
+.schedule-table th, .schedule-table td {
+    border-bottom: 1px solid #e3e6ef;
+    border-right: 1px solid #e3e6ef;
+    text-align: center;
+    vertical-align: middle;
+}
+.schedule-table th:last-child, .schedule-table td:last-child {
+    border-right: none;
+}
+.schedule-table tr:last-child th, .schedule-table tr:last-child td {
+    border-bottom: none;
+}
+.schedule-cell {
+    background: #fff;
+    height: 60px;
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    position: relative;
+}
+.schedule-cell:hover {
+    background: #e3f0fd;
+    box-shadow: 0 2px 8px rgba(66,133,244,0.08);
+    z-index: 1;
+}
+.schedule-table th {
+    background: #f1f3f4;
+    color: #5f6368;
+    font-weight: 600;
+    font-size: 1em;
+    padding: 10px 0;
+}
+@media (max-width: 768px) {
+    .schedule-table th, .schedule-table td {
+        font-size: 0.9em;
+        padding: 6px 0;
+    }
+    .schedule-table {
+        font-size: 0.95em;
+    }
+}
+
+/* 前週・次週ボタン Googleカレンダー風 */
+.schedule-nav-btn {
+    background: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 8px 22px;
+    margin: 0 8px;
+    font-size: 1em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(66,133,244,0.10);
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.schedule-nav-btn:hover {
+    background: #3367d6;
+    box-shadow: 0 4px 16px rgba(66,133,244,0.18);
+    transform: translateY(-2px) scale(1.04);
 } 
